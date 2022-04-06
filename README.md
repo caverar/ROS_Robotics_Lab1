@@ -2,7 +2,7 @@
 
 This repository contains both MATLAB and python scripts to interact with the ROS demo Turtle, working with services and topics to control the turtle position, velocity and orientation.
 
-## Developers
+## Authors
 
 * Maria Alejandra Rojas Frontanilla
 * Camilo Andres Vera Ruiz
@@ -16,7 +16,7 @@ Cambio SSH
 
 ## Connecting ROS to Matlab
 
-### What are we going to do
+### What are we going to do?
 
 The purpose here is to use ROS MATLAB toolbox to suscribe to a topic and send request messages to services, for that we will use the turtle example to see its positions and control it. This will be executed in three step described bellow.
 
@@ -32,7 +32,7 @@ At this step we only need to boot ROS and the turtle example, then execute the p
 
 To start ROS we execute `roscore` in a terminal instance, then we execute `rosrun turtlesim turtlesim_node` in another instance to start the turtle simulation node in the linux graphical environment.
 
-Tee script bellow is executed on a terminal, it is divided into 3 section, the first one start the ROS connection, the second one executes the topic publication, and the last one finalize the ROS connection.
+The script bellow is executed on MATLAB, it is divided into 3 section, the first one start the ROS connection, the second one executes the topic publication, and the last one finalize the ROS connection.
 
 ```Matlab
 %% ROS Connection
@@ -53,9 +53,34 @@ pause(1)
 rosshutdown;
 ```
 
+The result must be something like the image bellow, showing the movement in the horizontal axis due to the topic publication.
+
+
+![B-1](images/b-1.png)
+
 #### Topic Subscription
 
+In this exercise we are going to look for position, velocity and orientation  data through a suscripción to the turtle pose topic.
+
+In the same execution environment described in the previous exercise, we can execute the next code to see the last message in tha data transfer started due to topic subscription.
+
+```Matlab
+% Topis Subscription
+poseSub = rossubscriber('/turtle1/pose','turtlesim/Pose');
+% Wait for new data
+pause(1) 
+% print the las message
+poseSub.LatestMessage
+```
+
+The result must be something like the next image.
+
+![B-2](images/b-2.png)
+
 #### Service request message
+
+
+![B-3](images/b-3.png)
 
 ## Using Python with ROS
 
@@ -136,7 +161,7 @@ def pubVel():
         rate.sleep()
 ```
 
-Let's understand the function *pubVel* better. The first thing that we do is create a publisher of the topic */turtle1/cmd_vel*. After this, we initiate the node and while the node is avaiable (not shutdown) we publish data to the topic. In this case we set the linear velocity in x to 1 and the angular velocity (radians) to 2. This sounds quite similar to the movements that our turtle has to do when we press W, S, D and A, doesn't it? Well, we have to modify the function a little bit and it should work for our purpose.
+Let's understand the function *pubVel* better. The first thing that we do is create a publisher of the topic */turtle1/cmd_vel*. After this, we initiate the node and while the node is available (not shutdown) we publish data to the topic. In this case we set the linear velocity in x to 1 and the angular velocity (radians) to 2. This sounds quite similar to the movements that our turtle has to do when we press W, S, D and A, doesn't it? Well, we have to modify the function a little bit and it should work for our purpose.
 
 The original function *pubVel* doesn't have any parameters. If we call the function, it will always set the linear velocity in x to 1 and the angular velocity (radians) to 2. We must change that by adding to input parameters to the function. We will call them *move* and *rot* so that we set the linear velocity in x to mov and the angular velocity (radians) to rot.
 
