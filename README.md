@@ -9,19 +9,16 @@ This repository contains both MATLAB and python scripts to interact with the ROS
 
 ## Some of The Most-used Linux Commands
 
-... Cambio prueba
-Cambio SSH
-
-¿Que ponemos aquí?
+Pending...
 
 ## Connecting ROS to Matlab
 
 ### What are we going to do?
 
-The purpose here is to use ROS MATLAB toolbox to suscribe to a topic and send request messages to services, for that we will use the turtle example to see its positions and control it. This will be executed in three step described bellow.
+The purpose here is to use ROS MATLAB toolbox to suscribe and publish to a topic and send request messages to services, for that we will use the turtle example to see its positions and control it. This will be executed in the three step described bellow.
 
 * Implement the provided example to test topic publication in the turtle horizontal velocity.
-* Write a script to suscribe the pose topic of the turtle and show the last message on the MATLAB terminal.
+* Write a script to suscribe the `pose` topic of the turtle and show the last message on the MATLAB terminal.
 * Write a script capable to modify all the parameters present in the `pose` topic.
 
 ### How do we do it?
@@ -46,8 +43,8 @@ velPub = rospublisher('/turtle1/cmd_vel','geometry_msgs/Twist');
 velMsg = rosmessage(velPub);
 % Send message and give enough time to ROS to receive the response
 velMsg.Linear.X=1;
-send(velPub,velMsg)
-pause(1)
+send(velPub,velMsg);
+pause(1);
 
 %% Finalize ROS connection
 rosshutdown;
@@ -60,25 +57,93 @@ The result must be something like the image bellow, showing the movement in the 
 
 #### Topic Subscription
 
-In this exercise we are going to look for position, velocity and orientation  data through a suscripción to the turtle pose topic.
+In this exercise we are looking to get turtle position, velocity and orientation data through a suscripción to the turtle pose topic.
 
 In the same execution environment described in the previous exercise, we can execute the next code to see the last message in tha data transfer started due to topic subscription.
 
 ```Matlab
+%% ROS Connection
+clear;
+clc;
+rosinit;
+
 % Topis Subscription
 poseSub = rossubscriber('/turtle1/pose','turtlesim/Pose');
 % Wait for new data
-pause(1) 
-% print the las message
-poseSub.LatestMessage
+pause(1);
+% print the last message
+poseSub.LatestMessage;
+
+%% Finalize ROS connection
+rosshutdown;
 ```
 
-The result must be something like the next image.
+The result would look like the image bellow, with MATLAB terminal showing the last message of the subscription data transfer.
 
 ![B-2](images/b-2.png)
 
 #### Service request message
 
+In this exercise we are going to modify the pose topic parameters by sending request messages to two specific services that control all the parameters
+
+At first we need to define the input parameters for all the items defined in the pose topic, and then calculate the componentes of the linear velocity by projecting the vector on the axis, multiplying the velocity magnitude by cosine and sine of the angle, for x and y axis respectively. The code bellow show that procedure.
+
+```Matlab
+%% ROS Connection
+clear;
+clc;
+rosinit;
+
+% Parameters
+X = 3;
+Y = 3;
+theta = pi/3;
+linearVelocity = 22;
+AngularVelocity = 22;
+
+% Linear velocity calculation on each axis
+Vx = linearVelocity * cos(theta);
+Vy = linearVelocity * sin(theta);
+```
+
+The second step is to modify the turtle position to meet the input parameters of position "X" and "Y" by using the `teleport_absolute` service, that change the position of the turtle immediately without and intermediate movement, this can be achieved with the code showed bellow. Note that the current angle of the turtle is also modified.
+
+```Matlab
+%% teleport_absolute service
+
+% Create service client and message instances
+teleportClient = rossvcclient('/turtle1/teleport_absolute');
+teleportMsg = rosmessage(teleportClient);
+% Modify the message with the input parameters
+teleportMsg.X = X;
+teleportMsg.Y = Y;
+teleportMsg.Theta = theta;
+% Send the request message
+call(teleportClient,teleportMsg);
+```
+
+The last part is to modify the linear velocity and the angular velocity using the `cmd_vel` service. Is important to modify the specific parameter taking into account that the turtle demo is in a 2d plane, therefore there is no rotation on x and y axis, and no linear movement on z axis. The code bellow exceutes this procedure.
+
+```Matlab
+%% Movement publication
+% Create service client and message instances
+movementPub = rospublisher('/turtle1/cmd_vel','geometry_msgs/Twist');
+movementMsg = rosmessage(movementPub);
+% Modify the message with the input parameters
+movementMsg.Linear.X=Vx;
+movementMsg.Linear.Y=Vy;
+movementMsg.Angular.Z=AngularVelocity;
+% Send the request message
+send(movementPub,movementMsg);
+
+%% Wait for the message arrival
+pause(1);
+
+%% Finalize ROS connection
+rosshutdown;
+```
+
+In the same execution environment used in the two previous exercises we can execute all the previous showed code within the `ROS_Script_b.m` file attached in this repository. The result would look like the image bellow.
 
 ![B-3](images/b-3.png)
 

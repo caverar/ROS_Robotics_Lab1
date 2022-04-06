@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #Script de python del nodo tipo Teleop_key para mover turtle
 
 import rospy
