@@ -7,10 +7,6 @@ This repository contains both MATLAB and python scripts to interact with the ROS
 * Maria Alejandra Rojas Frontanilla
 * Camilo Andres Vera Ruiz
 
-## Some of The Most-used Linux Commands
-
-Pending...
-
 ## Connecting ROS to Matlab
 
 ### What are we going to do?
@@ -340,4 +336,6 @@ Now it should work. Pressing W, S, D, A, R or the space key should move and rota
 
 ## Conclusions
 
-The potential of ROS is huge. Developing the ability to connect it with different tools such as Matlab and Python helps us to understand its functionality and applicability to different projects. This lab helped us to reinforce the understanding of concepts like nodes, topics and services which are core fundamentals in this environment
+The potential of ROS is huge, developing the ability to connect it with different tools such as Matlab and Python helps us to understand its functionality and applicability to different projects. This lab helped us to reinforce the understanding of concepts like nodes, topics and services which are core fundamentals in this environment
+
+When working with services and topics, is really important to verify if they are read-only or can be modified, to avoid trying to publish to a read only topic, or sending request messages to modify values of read only services, which is reflected in non executed actions, taking care using the proper parameters to the respective service or topic and not assume that two of those with similar name and functionality such as absolute and relative movement in the turtle case, have the same parameters.
