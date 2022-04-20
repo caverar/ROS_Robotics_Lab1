@@ -330,7 +330,7 @@ In order to verify the script and the use of Python with ROS we can follow this 
     * Terminal 2: *rosrun turtlesim turtlesim node* (it runs the node of the turtle)
     * Terminal 3: *source devel/setup.bash* (When sourcing we update and take all the new changes into account). After sourcing we run *rosrun hello turtle myTeleopKey.py* (It runs the code that we wrote in this section)
 
-Now it should work. Pressing W, S, D, A, R or the space key should move and rotate the turtle according to the specifications :D (See the abstract art below to see an example of it should look like)
+Now it should work. Pressing W, S, D, A, R or the space key should move and rotate the turtle according to the specifications :D (See the abstract art below to see an example of how it should look like)
 
 ![result run myTeleopKey](images/runTurtle.png)
 
