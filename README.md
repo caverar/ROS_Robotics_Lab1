@@ -4,7 +4,7 @@ This repository contains both MATLAB and python scripts to interact with the ROS
 
 ## Authors
 
-* Maria Alejandra Rojas Frontanilla
+* Maria Alejandra Arias Frontanilla
 * Camilo Andres Vera Ruiz
 
 ## Connecting ROS to Matlab
